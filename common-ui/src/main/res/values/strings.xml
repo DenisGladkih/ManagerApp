@@ -40,7 +40,7 @@
     <string name="unknown_error">Неизвестная ошибка</string>
     <string name="no_network">"Нет интернета, проверьте интернет соединение"</string>
 
-    <string name="next_action">Пропустить</string>
+    <string name="skip_action">Пропустить</string>
     <string name="back_action">Назад</string>
     <string name="enter_your_name">Введите имя, номер телефона или адрес электронной почты для регистрации</string>
     <string name="your_name">Ваше имя</string>
