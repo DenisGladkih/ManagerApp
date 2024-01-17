@@ -1,5 +1,5 @@
 <resources>
-<string name="settings_logout_dialog_dismiss">Нет</string>
+    <string name="settings_logout_dialog_dismiss">Нет</string>
     <string name="settings_logout_dialog_title">Выйти из аккаунта?</string>
     <string name="settings_logout_dialog_body">При выходе из аккаунта, несохраненные на сервере данные будут потеряны.</string>
     <string name="settings_logout_dialog_confirm">Да, выйти</string>
@@ -39,5 +39,42 @@
     <string name="internal_auth_enter_pin">Введите PIN-код</string>
     <string name="unknown_error">Неизвестная ошибка</string>
     <string name="no_network">"Нет интернета, проверьте интернет соединение"</string>
+
+    <string name="next_action">Пропустить</string>
+    <string name="back_action">Назад</string>
+    <string name="enter_your_name">Введите имя, номер телефона или адрес электронной почты для регистрации</string>
+    <string name="your_name">Ваше имя</string>
+
+    <string name="create_your_first_place">Создайте первое заведение</string>
+    <string name="you_can_always_change">Вы всегда можете изменить данные в настройках</string>
+    <string name="name_of_place">Название заведения</string>
+    <string name="then_you_can">Далее вы сможете добавлять еще заведения</string>
+    <string name="country_and_city">Страна и город</string>
+    <string name="required_to_determine_the_time_zone">Требуется для определения часового пояса</string>
+    <string name="address">Адрес</string>
+    <string name="this_is_a_new_place">Это новое заведение</string>
+    <string name="check_the_box">Отметьте галочкой, если ваше заведение только начало работу</string>
+    <string name="automation_system">Система автоматизации</string>
+    <string name="name_of_the_system">Название системы, которой вы пользовались ранее</string>
+    <string name="what_type_of_place">Каким типом заведения вы владеете?</string>
+    <string name="tell_us_a_little_more">Расскажите немного больше о вашем бизнесе, чтобы мы смогли подобрать для вас полезные инструменты</string>
+    <string name="restaurant">Ресторан</string>
+    <string name="bar">Бар</string>
+    <string name="cafe">Кафе</string>
+    <string name="dining_room">Столовая</string>
+    <string name="coffee_house">Кофейня</string>
+    <string name="cooking">Кулинария</string>
+    <string name="other">Другое</string>
+    <string name="indicate_the_size">Укажите размеры вашего заведения</string>
+    <string name="total_area">Общая площадь помещения</string>
+    <string name="number_of_seats">Количество посадочных мест</string>
+    <string name="area_of_halls">Площадь залов для посетителей</string>
+    <string name="kitchen_area">Площадь кухни</string>
+    <string name="what_types_of">Какие типы сервисов вы будете предоставлять в вашем заведении?</string>
+    <string name="takeaway">Навынос</string>
+    <string name="in_the_place">В заведении</string>
+    <string name="delivery">Доставка</string>
+    <string name="thanks_for_application">Cпасибо за заявку!</string>
+    <string name="our_manager_will_contact">Наш менеджер скоро свяжется с вами для предоставления доступа к сервису</string>
 
 </resources>
