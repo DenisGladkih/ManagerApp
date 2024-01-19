@@ -1,19 +1,21 @@
 package net.nomia.pos.ui.onboarding.mvi
 
-data class OnboardingMviState(
+import net.nomia.pos.ui.onboarding.model.OnboardingStep
+
+internal data class OnboardingMviState(
     val skipButtonVisible: Boolean,
     val backButtonVisible: Boolean,
-    val isButtonNextEnabled: Boolean,
+    val isButtonContinueEnabled: Boolean,
     val footerVisible: Boolean,
-    val coloredSegmentsCount: Int,
+    val onboardingStep: OnboardingStep,
 ) {
     companion object {
         val INITIAL = OnboardingMviState(
-            skipButtonVisible = true,
-            backButtonVisible = true,
-            isButtonNextEnabled = true,
+            skipButtonVisible = false,
+            backButtonVisible = false,
+            isButtonContinueEnabled = true,
             footerVisible = true,
-            coloredSegmentsCount = 1,
+            onboardingStep = OnboardingStep.FIRST,
         )
     }
 }
