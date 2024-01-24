@@ -1,4 +1,4 @@
-package net.nomia.pos.ui.onboarding.composable
+package net.nomia.pos.ui.onboarding.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,10 +11,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import net.nomia.common.ui.theme.spacers
 import net.nomia.pos.R
-import net.nomia.pos.ui.onboarding.components.OnboardingListItem
+import net.nomia.pos.ui.onboarding.model.FifthStepValue
+import net.nomia.pos.ui.onboarding.mvi.OnboardingMviAction
 
 @Composable
 internal fun OnboardingFifthStep(
+    state: FifthStepValue,
+    onAction: (OnboardingMviAction) -> Unit,
 ) {
     Column {
         Text(
@@ -28,22 +31,28 @@ internal fun OnboardingFifthStep(
         OnboardingListItem(
             iconPainter = painterResource(id = R.drawable.ic_brunch_dining),
             headlineText = stringResource(id = R.string.takeaway),
-            checked = false,
-            onCheckedChange = {}
+            checked = state.isTakeAway,
+            onCheckedChange = { newValue ->
+                onAction(OnboardingMviAction.SetIsTakeAway(newValue))
+            }
         )
 
         OnboardingListItem(
             iconPainter = painterResource(id = R.drawable.ic_local_bar),
-            headlineText = stringResource(id = R.string.in_the_place),
-            checked = false,
-            onCheckedChange = {}
+            headlineText = stringResource(id = R.string.in_the_store),
+            checked = state.isInTheStore,
+            onCheckedChange = { newValue ->
+                onAction(OnboardingMviAction.SetIsInTheStore(newValue))
+            }
         )
 
         OnboardingListItem(
             iconPainter = painterResource(id = R.drawable.ic_fastfood),
             headlineText = stringResource(id = R.string.delivery),
-            checked = false,
-            onCheckedChange = {}
+            checked = state.isDelivery,
+            onCheckedChange = { newValue ->
+                onAction(OnboardingMviAction.SetIsDelivery(newValue))
+            }
         )
     }
 }
