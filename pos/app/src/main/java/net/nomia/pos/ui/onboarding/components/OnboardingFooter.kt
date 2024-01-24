@@ -26,12 +26,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import net.nomia.common.ui.composable.NomiaFilledButton
 import net.nomia.common.ui.composable.NomiaFooter
+import net.nomia.common.ui.composable.NomiaSpinner
 import net.nomia.common.ui.theme.spacers
 import net.nomia.pos.R
+import net.nomia.pos.ui.onboarding.composable.onboardingContentWidth
+import net.nomia.pos.ui.onboarding.model.ContinueButtonState
 
 @Composable
 internal fun ColumnScope.OnboardingFooter(
     backButtonVisible: Boolean,
+    continueButtonState: ContinueButtonState,
     onBackClick: () -> Unit,
     onContinueClick: () -> Unit,
 ) = NomiaFooter {
@@ -80,10 +84,15 @@ internal fun ColumnScope.OnboardingFooter(
             }
 
             NomiaFilledButton(
+                enabled = continueButtonState != ContinueButtonState.DISABLED,
                 onClick = onContinueClick,
                 modifier = Modifier.weight(weight = 1f),
             ) {
-                Text(text = stringResource(id = R.string.continue_action))
+                if (continueButtonState == ContinueButtonState.PROGRESS) {
+                    NomiaSpinner()
+                } else {
+                    Text(text = stringResource(id = R.string.continue_action))
+                }
             }
         }
     }
