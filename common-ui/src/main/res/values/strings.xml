@@ -47,7 +47,7 @@
 
     <string name="create_your_first_place">Создайте первое заведение</string>
     <string name="you_can_always_change">Вы всегда можете изменить данные в настройках</string>
-    <string name="name_of_place">Название заведения</string>
+    <string name="name_of_shop">Название заведения</string>
     <string name="then_you_can">Далее вы сможете добавлять еще заведения</string>
     <string name="country_and_city">Страна и город</string>
     <string name="required_to_determine_the_time_zone">Требуется для определения часового пояса</string>
@@ -72,7 +72,7 @@
     <string name="kitchen_area">Площадь кухни</string>
     <string name="what_types_of">Какие типы сервисов вы будете предоставлять в вашем заведении?</string>
     <string name="takeaway">Навынос</string>
-    <string name="in_the_place">В заведении</string>
+    <string name="in_the_store">В заведении</string>
     <string name="delivery">Доставка</string>
     <string name="thanks_for_application">Cпасибо за заявку!</string>
     <string name="our_manager_will_contact">Наш менеджер скоро свяжется с вами для предоставления доступа к сервису</string>
