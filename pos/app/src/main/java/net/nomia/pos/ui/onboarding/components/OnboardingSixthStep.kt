@@ -1,4 +1,4 @@
-package net.nomia.pos.ui.onboarding.composable
+package net.nomia.pos.ui.onboarding.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
