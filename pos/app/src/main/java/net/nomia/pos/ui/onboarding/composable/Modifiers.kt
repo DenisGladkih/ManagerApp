@@ -1,4 +1,4 @@
-package net.nomia.pos.ui.onboarding.components
+package net.nomia.pos.ui.onboarding.composable
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
