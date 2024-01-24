@@ -1,4 +1,4 @@
-package net.nomia.pos.ui.onboarding.composable
+package net.nomia.pos.ui.onboarding.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,10 +11,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import net.nomia.common.ui.theme.spacers
 import net.nomia.pos.R
-import net.nomia.pos.ui.onboarding.components.OnboardingListItem
+import net.nomia.pos.ui.onboarding.model.ThirdStepValue
+import net.nomia.pos.ui.onboarding.mvi.OnboardingMviAction
 
 @Composable
 internal fun OnboardingThirdStep(
+    state: ThirdStepValue,
+    onAction: (OnboardingMviAction) -> Unit,
 ) {
     Column {
         Text(
@@ -36,50 +39,64 @@ internal fun OnboardingThirdStep(
         OnboardingListItem(
             iconPainter = painterResource(id = R.drawable.ic_brunch_dining),
             headlineText = stringResource(id = R.string.restaurant),
-            checked = false,
-            onCheckedChange = {}
+            checked = state.isRestaurant,
+            onCheckedChange = { newValue ->
+                onAction(OnboardingMviAction.SetIsRestaurant(isRestaurant = newValue))
+            },
         )
 
         OnboardingListItem(
             iconPainter = painterResource(id = R.drawable.ic_local_bar),
             headlineText = stringResource(id = R.string.bar),
-            checked = false,
-            onCheckedChange = {}
+            checked = state.isBar,
+            onCheckedChange = { newValue ->
+                onAction(OnboardingMviAction.SetIsBar(isBar = newValue))
+            },
         )
 
         OnboardingListItem(
             iconPainter = painterResource(id = R.drawable.ic_fastfood),
             headlineText = stringResource(id = R.string.cafe),
-            checked = false,
-            onCheckedChange = {}
+            checked = state.isCafe,
+            onCheckedChange = { newValue ->
+                onAction(OnboardingMviAction.SetIsCafe(isCafe = newValue))
+            },
         )
 
         OnboardingListItem(
             iconPainter = painterResource(id = R.drawable.ic_soup_kitchen),
             headlineText = stringResource(id = R.string.dining_room),
-            checked = false,
-            onCheckedChange = {}
+            checked = state.isDiningRoom,
+            onCheckedChange = { newValue ->
+                onAction(OnboardingMviAction.SetIsDiningRoom(isDiningRoom = newValue))
+            },
         )
 
         OnboardingListItem(
             iconPainter = painterResource(id = R.drawable.ic_local_cafe),
             headlineText = stringResource(id = R.string.coffee_house),
-            checked = false,
-            onCheckedChange = {}
+            checked = state.isCoffeeHouse,
+            onCheckedChange = { newValue ->
+                onAction(OnboardingMviAction.SetIsCoffeeHouse(isCoffeeHouse = newValue))
+            },
         )
 
         OnboardingListItem(
             iconPainter = painterResource(id = R.drawable.ic_kebab_dining),
             headlineText = stringResource(id = R.string.cooking),
-            checked = false,
-            onCheckedChange = {}
+            checked = state.isCooking,
+            onCheckedChange = { newValue ->
+                onAction(OnboardingMviAction.SetIsCooking(isCooking = newValue))
+            },
         )
 
         OnboardingListItem(
             iconPainter = painterResource(id = R.drawable.ic_store),
             headlineText = stringResource(id = R.string.other),
-            checked = false,
-            onCheckedChange = {}
+            checked = state.isOther,
+            onCheckedChange = { newValue ->
+                onAction(OnboardingMviAction.SetIsOther(isOther = newValue))
+            },
         )
     }
 }
