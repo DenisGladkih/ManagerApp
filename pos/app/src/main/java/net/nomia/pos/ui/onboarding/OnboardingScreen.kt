@@ -30,13 +30,13 @@ import net.nomia.common.ui.theme.spacers
 import net.nomia.pos.R
 import net.nomia.pos.ui.onboarding.components.OnboardingFooter
 import net.nomia.pos.ui.onboarding.components.OnboardingSegmentsBar
-import net.nomia.pos.ui.onboarding.components.onboardingContentWidth
-import net.nomia.pos.ui.onboarding.composable.OnboardingFifthStep
-import net.nomia.pos.ui.onboarding.composable.OnboardingFirstStep
-import net.nomia.pos.ui.onboarding.composable.OnboardingFourthStep
-import net.nomia.pos.ui.onboarding.composable.OnboardingSecondStep
-import net.nomia.pos.ui.onboarding.composable.OnboardingSixthStep
-import net.nomia.pos.ui.onboarding.composable.OnboardingThirdStep
+import net.nomia.pos.ui.onboarding.composable.onboardingContentWidth
+import net.nomia.pos.ui.onboarding.components.OnboardingFifthStep
+import net.nomia.pos.ui.onboarding.components.OnboardingFirstStep
+import net.nomia.pos.ui.onboarding.components.OnboardingFourthStep
+import net.nomia.pos.ui.onboarding.components.OnboardingSecondStep
+import net.nomia.pos.ui.onboarding.components.OnboardingSixthStep
+import net.nomia.pos.ui.onboarding.components.OnboardingThirdStep
 import net.nomia.pos.ui.onboarding.model.OnboardingStep
 import net.nomia.pos.ui.onboarding.mvi.OnboardingMviAction
 
@@ -44,16 +44,13 @@ import net.nomia.pos.ui.onboarding.mvi.OnboardingMviAction
 internal fun OnboardingScreen(
     viewModel: OnboardingViewModel = hiltViewModel(),
 ) {
-    val state by viewModel.collectAsState()
+    val state by viewModel.collectAsState(
+        launchActions = listOf(OnboardingMviAction.FetchData)
+    )
 
     BackHandler {
-        viewModel.acceptAction(action=OnboardingMviAction.Back)
+        viewModel.acceptAction(action = OnboardingMviAction.Back)
     }
-
-    val skipButtonVisible = state.skipButtonVisible
-    val backButtonVisible = state.backButtonVisible
-    val footerVisible = state.footerVisible
-    val onboardingStep = state.onboardingStep
 
     NomiaScrollableScaffold(
         title = {
@@ -65,13 +62,13 @@ internal fun OnboardingScreen(
         },
         actions = {
             AnimatedVisibility(
-                visible = skipButtonVisible,
+                visible = state.skipButtonVisible,
                 enter = fadeIn(),
                 exit = fadeOut(),
             ) {
                 TextButton(
                     onClick = {
-                              viewModel.acceptAction(action =OnboardingMviAction.Skip )
+                        viewModel.acceptAction(action = OnboardingMviAction.Skip)
                     },
                     colors = ButtonDefaults.buttonColors(
                         contentColor = MaterialTheme.colorScheme.primary,
@@ -84,12 +81,13 @@ internal fun OnboardingScreen(
         },
         footer = {
             AnimatedVisibility(
-                visible = footerVisible,
+                visible = state.footerVisible,
                 enter = fadeIn(),
                 exit = fadeOut(),
             ) {
                 OnboardingFooter(
-                    backButtonVisible = backButtonVisible,
+                    continueButtonState = state.continueButtonState,
+                    backButtonVisible = state.backButtonVisible,
                     onBackClick = {
                         viewModel.acceptAction(OnboardingMviAction.Back)
                     },
@@ -105,23 +103,44 @@ internal fun OnboardingScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth(),
         ) {
-            OnboardingSegmentsBar(onboardingStep = onboardingStep)
+            OnboardingSegmentsBar(onboardingStep = state.onboardingStep)
 
             val isTablet = booleanResource(id = R.bool.isTablet)
+
             if (isTablet) {
                 Spacer(modifier = Modifier.height(height = MaterialTheme.spacers.extraLarge))
             } else {
                 Spacer(modifier = Modifier.height(height = MaterialTheme.spacers.medium))
             }
 
-            Crossfade(targetState = onboardingStep, label = "Onboarding content") { step ->
+            Crossfade(targetState = state.onboardingStep, label = "Onboarding content") { step ->
                 Column(modifier = Modifier.onboardingContentWidth()) {
                     when (step) {
-                        OnboardingStep.FIRST -> OnboardingFirstStep()
-                        OnboardingStep.SECOND -> OnboardingSecondStep()
-                        OnboardingStep.THIRD -> OnboardingThirdStep()
-                        OnboardingStep.FOURTH -> OnboardingFourthStep()
-                        OnboardingStep.FIFTH -> OnboardingFifthStep()
+                        OnboardingStep.FIRST -> OnboardingFirstStep(
+                            onAction = viewModel::acceptAction,
+                            state = state.firstStepValue,
+                        )
+
+                        OnboardingStep.SECOND -> OnboardingSecondStep(
+                            onAction = viewModel::acceptAction,
+                            state = state.secondStepValue,
+                        )
+
+                        OnboardingStep.THIRD -> OnboardingThirdStep(
+                            onAction = viewModel::acceptAction,
+                            state = state.thirdStepValue,
+                        )
+
+                        OnboardingStep.FOURTH -> OnboardingFourthStep(
+                            onAction = viewModel::acceptAction,
+                            state = state.fourthStepValue,
+                        )
+
+                        OnboardingStep.FIFTH -> OnboardingFifthStep(
+                            onAction = viewModel::acceptAction,
+                            state = state.fifthStepValue,
+                        )
+
                         OnboardingStep.SIXTH -> OnboardingSixthStep()
                     }
                 }
