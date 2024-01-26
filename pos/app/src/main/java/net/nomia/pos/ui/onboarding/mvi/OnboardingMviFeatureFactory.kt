@@ -9,5 +9,6 @@ internal class OnboardingMviFeatureFactory(
     initialState = OnboardingMviState.INITIAL,
     actor = actor,
     reducer = OnboardingMviReducer,
+    eventProducer = OnboardingMviEventProducer,
     tagPostfix = "OnboardingMviFeature"
 )
