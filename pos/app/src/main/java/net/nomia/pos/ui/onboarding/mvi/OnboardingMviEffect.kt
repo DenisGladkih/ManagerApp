@@ -1,67 +1,38 @@
 package net.nomia.pos.ui.onboarding.mvi
 
 import net.nomia.pos.ui.onboarding.model.ContinueButtonState
-import net.nomia.pos.ui.onboarding.model.FifthStepValue
-import net.nomia.pos.ui.onboarding.model.FirstStepValue
-import net.nomia.pos.ui.onboarding.model.FourthStepValue
+import net.nomia.pos.ui.onboarding.model.ManagerData
 import net.nomia.pos.ui.onboarding.model.OnboardingStep
-import net.nomia.pos.ui.onboarding.model.SecondStepValue
-import net.nomia.pos.ui.onboarding.model.ThirdStepValue
 
 internal sealed interface OnboardingMviEffect {
-
-    object Logout : OnboardingMviEffect
-
-    data class Continue(
+    data class MoveFroward(
         val onboardingStep: OnboardingStep,
         val skipButtonVisible: Boolean,
         val backButtonVisible: Boolean,
         val footerVisible: Boolean,
+        val coloredSegmentsCount: Int,
         val continueButtonState: ContinueButtonState,
     ) : OnboardingMviEffect
 
-
-    data class Back(
+    data class MoveBack(
         val onboardingStep: OnboardingStep,
         val skipButtonVisible: Boolean,
         val backButtonVisible: Boolean,
         val footerVisible: Boolean,
+        val coloredSegmentsCount: Int,
         val continueButtonState: ContinueButtonState,
     ) : OnboardingMviEffect
 
-    data class FetchData(
-        val firstStepValue: FirstStepValue,
-        val secondStepValue: SecondStepValue,
-        val thirdStepValue: ThirdStepValue,
-        val fourthStepValue: FourthStepValue,
-        val fifthStepValue: FifthStepValue,
+    data class FetchManagerData(
+        val managerData: ManagerData,
         val continueButtonState: ContinueButtonState,
     ) : OnboardingMviEffect
 
-//    data class SetFirstStepValue(
-//        val firstStepValue: FirstStepValue,
-//    ) : OnboardingMviEffect
-//
-//    data class SetSecondStepValue(
-//        val secondStepValue: SecondStepValue,
-//    ) : OnboardingMviEffect
-//
-//    data class SetThirdStepValue(
-//        val thirdStepValue: ThirdStepValue,
-//    ) : OnboardingMviEffect
-//
-//    data class SetFourthStepValue(
-//        val fourthStepValue: FourthStepValue,
-//    ) : OnboardingMviEffect
-//
-//    data class SetFifthStepValue(
-//        val fifthStepValue: FifthStepValue,
-//    ) : OnboardingMviEffect
-
-    data class ChangeContinueButtonState(
+    data class SetContinueButtonState(
         val continueButtonState: ContinueButtonState,
     ) : OnboardingMviEffect
 
+    data class ShowError(val message: String?) : OnboardingMviEffect
 
     data class InputClientName(val clientName: String) : OnboardingMviEffect
 

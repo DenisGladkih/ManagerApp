@@ -1,13 +1,13 @@
 package net.nomia.pos.ui.onboarding.mvi
 
 internal sealed interface OnboardingMviAction {
-    object Skip : OnboardingMviAction
+    object SkipStep : OnboardingMviAction
 
-    object Continue : OnboardingMviAction
+    object MoveForward : OnboardingMviAction
 
-    object Back : OnboardingMviAction
+    object MoveBack : OnboardingMviAction
 
-    object FetchData : OnboardingMviAction
+    object FetchManagerData : OnboardingMviAction
 
     data class InputClientName(val clientName: String) : OnboardingMviAction
 
