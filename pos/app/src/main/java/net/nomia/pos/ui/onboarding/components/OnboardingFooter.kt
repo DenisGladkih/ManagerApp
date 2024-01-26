@@ -59,9 +59,12 @@ internal fun ColumnScope.OnboardingFooter(
                             containerColor = Color.Transparent,
                             contentColor = MaterialTheme.colorScheme.primary,
                         ),
-                        modifier = Modifier.width(width = 91.dp)
+                        modifier = Modifier.width(width = 91.dp).weight(1f,false )
                     ) {
-                        Text(text = stringResource(id = R.string.back_action))
+                        Text(
+                            text = stringResource(id = R.string.back_action),
+                            maxLines = 1,
+                        )
                     }
                 } else {
                     OutlinedIconButton(
