@@ -13,25 +13,31 @@ internal data class OnboardingMviState(
     val backButtonVisible: Boolean,
     val footerVisible: Boolean,
     val onboardingStep: OnboardingStep,
+    val coloredSegments: Int,
+    val topBarSegmentsCount: Int,
+    val continueButtonState: ContinueButtonState,
     val firstStepValue: FirstStepValue,
     val secondStepValue: SecondStepValue,
     val thirdStepValue: ThirdStepValue,
     val fourthStepValue: FourthStepValue,
     val fifthStepValue: FifthStepValue,
-    val continueButtonState: ContinueButtonState,
 ) {
     companion object {
+        private val topBarSegmentsCount = OnboardingStep.values().size
+        private const val defaultColoredSegments = 1
         val INITIAL = OnboardingMviState(
             skipButtonVisible = false,
             backButtonVisible = false,
             footerVisible = true,
             onboardingStep = OnboardingStep.FIRST,
+            coloredSegments = defaultColoredSegments,
+            topBarSegmentsCount = topBarSegmentsCount,
+            continueButtonState = ContinueButtonState.DISABLED,
             firstStepValue = FirstStepValue.INITIAL,
             secondStepValue = SecondStepValue.INITIAL,
             thirdStepValue = ThirdStepValue.INITIAL,
             fourthStepValue = FourthStepValue.INITIAL,
             fifthStepValue = FifthStepValue.INITIAL,
-            continueButtonState = ContinueButtonState.DISABLED,
         )
     }
 }
