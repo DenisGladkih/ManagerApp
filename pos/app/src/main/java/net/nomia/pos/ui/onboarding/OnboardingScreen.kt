@@ -13,10 +13,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,28 +31,39 @@ import net.nomia.common.ui.composable.NomiaScrollableScaffold
 import net.nomia.common.ui.theme.appResources
 import net.nomia.common.ui.theme.spacers
 import net.nomia.pos.R
-import net.nomia.pos.ui.onboarding.components.OnboardingFooter
-import net.nomia.pos.ui.onboarding.components.OnboardingSegmentsBar
-import net.nomia.pos.ui.onboarding.composable.onboardingContentWidth
 import net.nomia.pos.ui.onboarding.components.OnboardingFifthStep
 import net.nomia.pos.ui.onboarding.components.OnboardingFirstStep
+import net.nomia.pos.ui.onboarding.components.OnboardingFooter
 import net.nomia.pos.ui.onboarding.components.OnboardingFourthStep
 import net.nomia.pos.ui.onboarding.components.OnboardingSecondStep
+import net.nomia.pos.ui.onboarding.components.OnboardingSegmentsBar
 import net.nomia.pos.ui.onboarding.components.OnboardingSixthStep
 import net.nomia.pos.ui.onboarding.components.OnboardingThirdStep
+import net.nomia.pos.ui.onboarding.composable.onboardingContentWidth
 import net.nomia.pos.ui.onboarding.model.OnboardingStep
 import net.nomia.pos.ui.onboarding.mvi.OnboardingMviAction
+import net.nomia.pos.ui.onboarding.mvi.OnboardingMviEvent
 
 @Composable
 internal fun OnboardingScreen(
     viewModel: OnboardingViewModel = hiltViewModel(),
 ) {
-    val state by viewModel.collectAsState(
-        launchActions = listOf(OnboardingMviAction.FetchData)
-    )
-
     BackHandler {
-        viewModel.acceptAction(action = OnboardingMviAction.Back)
+        viewModel.acceptAction(action = OnboardingMviAction.MoveBack)
+    }
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    val defaultErrorMessage = stringResource(id = R.string.something_went_wrong)
+
+    val state by viewModel.collectAsState(
+        launchActions = listOf(
+            OnboardingMviAction.FetchManagerData,
+        )
+    ) { event ->
+        if (event is OnboardingMviEvent.OnShowError) {
+            val message = event.error
+            snackbarHostState.showSnackbar(message = message ?: defaultErrorMessage)
+        }
     }
 
     NomiaScrollableScaffold(
@@ -68,7 +82,7 @@ internal fun OnboardingScreen(
             ) {
                 TextButton(
                     onClick = {
-                        viewModel.acceptAction(action = OnboardingMviAction.Skip)
+                        viewModel.acceptAction(action = OnboardingMviAction.SkipStep)
                     },
                     colors = ButtonDefaults.buttonColors(
                         contentColor = MaterialTheme.colorScheme.primary,
@@ -89,21 +103,26 @@ internal fun OnboardingScreen(
                     continueButtonState = state.continueButtonState,
                     backButtonVisible = state.backButtonVisible,
                     onBackClick = {
-                        viewModel.acceptAction(OnboardingMviAction.Back)
+                        viewModel.acceptAction(OnboardingMviAction.MoveBack)
                     },
                     onContinueClick = {
-                        viewModel.acceptAction(action = OnboardingMviAction.Continue)
+                        viewModel.acceptAction(action = OnboardingMviAction.MoveForward)
                     },
                 )
             }
         },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+
         contentPadding = PaddingValues(horizontal = MaterialTheme.spacers.medium),
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth(),
         ) {
-            OnboardingSegmentsBar(onboardingStep = state.onboardingStep)
+            OnboardingSegmentsBar(
+                segmentsCount = state.topBarSegmentsCount,
+                coloredSegments = state.coloredSegments,
+            )
 
             val isTablet = booleanResource(id = R.bool.isTablet)
 
