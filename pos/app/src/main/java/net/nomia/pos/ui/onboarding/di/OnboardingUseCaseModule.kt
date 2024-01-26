@@ -24,6 +24,8 @@ import net.nomia.pos.ui.onboarding.domain.usecase.SaveSecondStepValueUseCase
 import net.nomia.pos.ui.onboarding.domain.usecase.SaveSecondStepValueUseCaseImpl
 import net.nomia.pos.ui.onboarding.domain.usecase.SaveThirdStepValueUseCase
 import net.nomia.pos.ui.onboarding.domain.usecase.SaveThirdStepValueUseCaseImpl
+import net.nomia.pos.ui.onboarding.domain.usecase.SaveManagerDataUseCase
+import net.nomia.pos.ui.onboarding.domain.usecase.SaveManagerDataUseCaseImpl
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -77,4 +79,9 @@ internal interface OnboardingUseCaseModule {
     fun bindSaveFifthStepValueUseCase(
         saveFifthStepValueUseCase: SaveFifthStepValueUseCaseImpl,
     ): SaveFifthStepValueUseCase
+
+    @Binds
+    fun bindSaveManagerDataUseCase(
+        saveManagerDataUseCase: SaveManagerDataUseCaseImpl,
+    ): SaveManagerDataUseCase
 }
