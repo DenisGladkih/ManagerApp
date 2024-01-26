@@ -76,5 +76,6 @@
     <string name="delivery">Доставка</string>
     <string name="thanks_for_application">Cпасибо за заявку!</string>
     <string name="our_manager_will_contact">Наш менеджер скоро свяжется с вами для предоставления доступа к сервису</string>
+    <string name="something_went_wrong">Что-то пошло не так"</string>
 
 </resources>
