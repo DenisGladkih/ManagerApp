@@ -79,6 +79,13 @@ hilt {
 
 dependencies {
     implementation(platform(libs.compose.bom))
+
+    implementation(libs.jwt)
+    implementation(project(":pos:erp-api"))
+    implementation(project(":pos:erp-schema"))
+    implementation(libs.bundles.apollo)
+    implementation(libs.sentry.apollo)
+
     debugImplementation(libs.compose.ui.tooling)
     implementation(libs.bundles.compose)
     implementation(libs.hilt.navigation.compose) {
