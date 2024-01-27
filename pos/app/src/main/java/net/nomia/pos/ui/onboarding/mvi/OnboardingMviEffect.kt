@@ -11,7 +11,6 @@ internal sealed interface OnboardingMviEffect {
         val backButtonVisible: Boolean,
         val footerVisible: Boolean,
         val coloredSegmentsCount: Int,
-        val continueButtonState: ContinueButtonState,
     ) : OnboardingMviEffect
 
     data class MoveBack(
@@ -23,14 +22,12 @@ internal sealed interface OnboardingMviEffect {
         val continueButtonState: ContinueButtonState,
     ) : OnboardingMviEffect
 
-    data class FetchManagerData(
-        val managerData: ManagerData,
-        val continueButtonState: ContinueButtonState,
-    ) : OnboardingMviEffect
 
     data class SetContinueButtonState(
         val continueButtonState: ContinueButtonState,
     ) : OnboardingMviEffect
+
+    data class FetchManagerData(val managerData: ManagerData) : OnboardingMviEffect
 
     data class ShowError(val message: String?) : OnboardingMviEffect
 
