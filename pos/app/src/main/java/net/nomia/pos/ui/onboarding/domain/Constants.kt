@@ -1,4 +1,4 @@
-package net.nomia.pos.ui.onboarding
+package net.nomia.pos.ui.onboarding.domain
 
 internal const val CLIENT_NAME = "CLIENT_NAME"
 internal const val PHONE_OR_EMAIL = "PHONE_OR_EMAIL"

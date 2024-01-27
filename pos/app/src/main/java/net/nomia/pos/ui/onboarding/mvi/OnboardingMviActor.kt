@@ -6,33 +6,24 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import net.nomia.auth.domain.LogoutUseCase
 import net.nomia.mvi.MviActor
-import net.nomia.pos.ui.onboarding.domain.usecase.GetFifthStepValueUseCase
-import net.nomia.pos.ui.onboarding.domain.usecase.GetFirstStepValueUseCase
-import net.nomia.pos.ui.onboarding.domain.usecase.GetFourthStepValueUseCase
-import net.nomia.pos.ui.onboarding.domain.usecase.GetSecondStepValueUseCase
-import net.nomia.pos.ui.onboarding.domain.usecase.GetThirdStepValueUseCase
-import net.nomia.pos.ui.onboarding.domain.usecase.SaveFifthStepValueUseCase
-import net.nomia.pos.ui.onboarding.domain.usecase.SaveFirstStepValueUseCase
-import net.nomia.pos.ui.onboarding.domain.usecase.SaveFourthStepValueUseCase
-import net.nomia.pos.ui.onboarding.domain.usecase.SaveManagerDataUseCase
-import net.nomia.pos.ui.onboarding.domain.usecase.SaveSecondStepValueUseCase
-import net.nomia.pos.ui.onboarding.domain.usecase.SaveThirdStepValueUseCase
+import net.nomia.pos.ui.onboarding.domain.usecase.local.GetManagerDataUseCase
+import net.nomia.pos.ui.onboarding.domain.usecase.local.SaveFifthStepValueUseCase
+import net.nomia.pos.ui.onboarding.domain.usecase.local.SaveFirstStepValueUseCase
+import net.nomia.pos.ui.onboarding.domain.usecase.local.SaveFourthStepValueUseCase
+import net.nomia.pos.ui.onboarding.domain.usecase.local.SaveSecondStepValueUseCase
+import net.nomia.pos.ui.onboarding.domain.usecase.local.SaveThirdStepValueUseCase
+import net.nomia.pos.ui.onboarding.domain.usecase.remote.SaveManagerDataUseCase
 import net.nomia.pos.ui.onboarding.model.ContinueButtonState
-import net.nomia.pos.ui.onboarding.model.ManagerData
 import net.nomia.pos.ui.onboarding.model.OnboardingStep
 import net.nomia.pos.ui.onboarding.model.Resource
 
 internal class OnboardingMviActor(
     private val logoutUseCase: LogoutUseCase,
+    private val getManagerDataUseCase: GetManagerDataUseCase,
     private val saveFirstStepValueUseCase: SaveFirstStepValueUseCase,
-    private val getFirstStepValueUseCase: GetFirstStepValueUseCase,
-    private val getSecondStepValueUseCase: GetSecondStepValueUseCase,
     private val saveSecondStepValueUseCase: SaveSecondStepValueUseCase,
-    private val getThirdStepValueUseCase: GetThirdStepValueUseCase,
     private val saveThirdStepValueUseCase: SaveThirdStepValueUseCase,
-    private val getFourthStepValueUseCase: GetFourthStepValueUseCase,
     private val saveFourthStepValueUseCase: SaveFourthStepValueUseCase,
-    private val getFifthStepValueUseCase: GetFifthStepValueUseCase,
     private val saveFifthStepValueUseCase: SaveFifthStepValueUseCase,
     private val saveManagerDataUseCase: SaveManagerDataUseCase,
 ) : MviActor<OnboardingMviAction, OnboardingMviEffect, OnboardingMviState> {
@@ -334,17 +325,10 @@ internal class OnboardingMviActor(
 
     private operator fun OnboardingMviAction.FetchManagerData.invoke(): Flow<OnboardingMviEffect> =
         flow {
-            val managerData = ManagerData(
-                firstStepValue = getFirstStepValueUseCase(),
-                secondStepValue = getSecondStepValueUseCase(),
-                thirdStepValue = getThirdStepValueUseCase(),
-                fourthStepValue = getFourthStepValueUseCase(),
-                fifthStepValue = getFifthStepValueUseCase(),
-            )
-
+            val managerData = getManagerDataUseCase()
             emit(
                 OnboardingMviEffect.FetchManagerData(
-                    managerData = managerData,
+                    managerData = managerData
                 )
             )
         }

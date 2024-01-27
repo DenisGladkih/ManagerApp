@@ -1,7 +1,6 @@
 import net.nomia.gradle.AppGradleExtension.applyComposeConfig
 import net.nomia.gradle.GradleExtension.getGeneralKotlinConfigure
 import net.nomia.gradle.Version
-import java.util.*
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
