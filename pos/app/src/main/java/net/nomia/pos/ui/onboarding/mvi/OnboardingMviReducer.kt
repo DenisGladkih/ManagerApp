@@ -2,7 +2,7 @@ package net.nomia.pos.ui.onboarding.mvi
 
 import net.nomia.mvi.MviReducer
 import net.nomia.pos.ui.onboarding.model.ContinueButtonState
-import net.nomia.pos.ui.onboarding.onboarding_utils.getContinueButtonState
+import net.nomia.pos.ui.onboarding.model.OnboardingStep
 
 internal object OnboardingMviReducer : MviReducer<OnboardingMviEffect, OnboardingMviState> {
 
@@ -40,17 +40,23 @@ internal object OnboardingMviReducer : MviReducer<OnboardingMviEffect, Onboardin
         }
     }
 
-    private operator fun OnboardingMviEffect.MoveFroward.invoke(previousState: OnboardingMviState) =
-        previousState.copy(
+    private operator fun OnboardingMviEffect.MoveFroward.invoke(previousState: OnboardingMviState): OnboardingMviState {
+        val isStateValid = if (onboardingStep == OnboardingStep.SECOND) {
+            previousState.secondStepValue.isValid()
+        } else {
+            true
+        }
+
+        return previousState.copy(
             onboardingStep = this.onboardingStep,
             skipButtonVisible = this.skipButtonVisible,
             backButtonVisible = this.backButtonVisible,
             footerVisible = this.footerVisible,
             coloredSegments = this.coloredSegmentsCount,
-            continueButtonState = this.continueButtonState,
+            continueButtonState = getContinueButtonState(isStateValid = isStateValid),
         )
+    }
 }
-
 
 private operator fun OnboardingMviEffect.MoveBack.invoke(previousState: OnboardingMviState) =
     previousState.copy(
@@ -254,13 +260,20 @@ private operator fun OnboardingMviEffect.SetContinueButtonState.invoke(
 
 private operator fun OnboardingMviEffect.FetchManagerData.invoke(
     previousState: OnboardingMviState
-): OnboardingMviState {
-    return previousState.copy(
-        continueButtonState = this.continueButtonState,
-        firstStepValue = this.managerData.firstStepValue,
-        secondStepValue = this.managerData.secondStepValue,
-        thirdStepValue = this.managerData.thirdStepValue,
-        fourthStepValue = this.managerData.fourthStepValue,
-        fifthStepValue = this.managerData.fifthStepValue,
-    )
+): OnboardingMviState = previousState.copy(
+    continueButtonState = getContinueButtonState(this.managerData.firstStepValue.isValid()),
+    firstStepValue = this.managerData.firstStepValue,
+    secondStepValue = this.managerData.secondStepValue,
+    thirdStepValue = this.managerData.thirdStepValue,
+    fourthStepValue = this.managerData.fourthStepValue,
+    fifthStepValue = this.managerData.fifthStepValue,
+)
+
+private fun getContinueButtonState(isStateValid: Boolean): ContinueButtonState {
+    val continueButtonState = if (isStateValid) {
+        ContinueButtonState.ENABLED
+    } else {
+        ContinueButtonState.DISABLED
+    }
+    return continueButtonState
 }
