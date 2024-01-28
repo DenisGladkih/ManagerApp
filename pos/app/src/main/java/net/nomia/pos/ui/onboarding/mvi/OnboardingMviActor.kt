@@ -1,9 +1,11 @@
 package net.nomia.pos.ui.onboarding.mvi
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import net.nomia.auth.domain.LogoutUseCase
 import net.nomia.mvi.MviActor
 import net.nomia.pos.ui.onboarding.domain.usecase.local.GetManagerDataUseCase
@@ -62,12 +64,12 @@ internal class OnboardingMviActor(
 
     private infix fun OnboardingMviAction.moveForward(
         previousState: OnboardingMviState,
-    ): Flow<OnboardingMviEffect> = flow {
+    ): Flow<OnboardingMviEffect> {
 
         saveStepValue(previousState = previousState)
 
-        when (previousState.onboardingStep) {
-            OnboardingStep.FIRST -> emit(
+        return when (previousState.onboardingStep) {
+            OnboardingStep.FIRST -> flowOf(
                 OnboardingMviEffect.MoveFroward(
                     onboardingStep = previousState.onboardingStep.getNext(),
                     skipButtonVisible = false,
@@ -77,7 +79,7 @@ internal class OnboardingMviActor(
                 )
             )
 
-            OnboardingStep.SECOND -> emit(
+            OnboardingStep.SECOND -> flowOf(
                 OnboardingMviEffect.MoveFroward(
                     onboardingStep = previousState.onboardingStep.getNext(),
                     skipButtonVisible = true,
@@ -87,7 +89,7 @@ internal class OnboardingMviActor(
                 )
             )
 
-            OnboardingStep.THIRD -> emit(
+            OnboardingStep.THIRD -> flowOf(
                 OnboardingMviEffect.MoveFroward(
                     onboardingStep = previousState.onboardingStep.getNext(),
                     skipButtonVisible = true,
@@ -97,7 +99,7 @@ internal class OnboardingMviActor(
                 )
             )
 
-            OnboardingStep.FOURTH -> emit(
+            OnboardingStep.FOURTH -> flowOf(
                 OnboardingMviEffect.MoveFroward(
                     onboardingStep = previousState.onboardingStep.getNext(),
                     skipButtonVisible = true,
@@ -107,31 +109,27 @@ internal class OnboardingMviActor(
                 )
             )
 
-            OnboardingStep.FIFTH -> {
-                saveManagerDataUseCase().collect { result ->
-                    when (result) {
-                        is Resource.Loading -> emit(
-                            OnboardingMviEffect.SetContinueButtonState(ContinueButtonState.PROGRESS)
+            OnboardingStep.FIFTH -> saveManagerDataUseCase().mapLatest { result ->
+                when (result) {
+                    is Resource.Loading ->
+                        OnboardingMviEffect.SetContinueButtonState(ContinueButtonState.PROGRESS)
+
+                    is Resource.Success ->
+                        OnboardingMviEffect.MoveFroward(
+                            onboardingStep = previousState.onboardingStep.getNext(),
+                            skipButtonVisible = false,
+                            backButtonVisible = false,
+                            footerVisible = false,
+                            coloredSegmentsCount = previousState.coloredSegments.inc()
                         )
 
-                        is Resource.Success -> emit(
-                            OnboardingMviEffect.MoveFroward(
-                                onboardingStep = previousState.onboardingStep.getNext(),
-                                skipButtonVisible = false,
-                                backButtonVisible = false,
-                                footerVisible = false,
-                                coloredSegmentsCount = previousState.coloredSegments.inc()
-                            )
-                        )
+                    is Resource.Error ->
+                        OnboardingMviEffect.ShowError(message = result.message)
 
-                        is Resource.Error -> emit(
-                            OnboardingMviEffect.ShowError(message = result.message)
-                        )
-                    }
                 }
             }
 
-            OnboardingStep.SIXTH -> Unit
+            OnboardingStep.SIXTH -> emptyFlow()
         }
     }
 
@@ -189,8 +187,8 @@ internal class OnboardingMviActor(
     private infix fun OnboardingMviAction.skipStep(
         previousState: OnboardingMviState,
     ): Flow<OnboardingMviEffect> = if (previousState.onboardingStep == OnboardingStep.FIFTH) {
-        saveManagerDataUseCase().map { result ->
-            when (result) {
+        saveManagerDataUseCase().map { resource ->
+            when (resource) {
                 is Resource.Loading ->
                     OnboardingMviEffect.SetContinueButtonState(ContinueButtonState.PROGRESS)
 
@@ -203,7 +201,7 @@ internal class OnboardingMviActor(
                         coloredSegmentsCount = previousState.coloredSegments.inc()
                     )
 
-                is Resource.Error -> OnboardingMviEffect.ShowError(message = result.message)
+                is Resource.Error -> OnboardingMviEffect.ShowError(message = resource.message)
             }
         }
     } else {
