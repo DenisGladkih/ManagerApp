@@ -1,6 +1,12 @@
 package net.nomia.pos.ui.onboarding.domain.usecase.remote
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.stateIn
+import net.nomia.main.domain.PrincipalRepository
 import net.nomia.pos.ui.onboarding.data.repo.RemoteOnboardingRepository
 import net.nomia.pos.ui.onboarding.model.Resource
 import javax.inject.Inject
@@ -11,13 +17,24 @@ internal interface SaveManagerDataUseCase {
 }
 
 internal class SaveManagerDataUseCaseImpl @Inject constructor(
-    private val remoteOnboardingRepository: RemoteOnboardingRepository
-
+    principalRepository: PrincipalRepository,
+    private val remoteOnboardingRepository: RemoteOnboardingRepository,
 ) : SaveManagerDataUseCase {
-    override fun invoke(): Flow<Resource<Nothing>> =
-        remoteOnboardingRepository.saveManagerData(
-            auth = null,
-            catalogId = null,
-            organizationId = null,
+
+    private val authFlow = principalRepository.getAuthFlow()
+        .stateIn(
+            scope = CoroutineScope(Dispatchers.IO),
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = null,
         )
+
+    override fun invoke(): Flow<Resource<Nothing>> {
+        authFlow.value.let { auth ->
+            return if (auth == null) {
+                flowOf(Resource.Error())
+            } else {
+                remoteOnboardingRepository.saveManagerData(auth = auth)
+            }
+        }
+    }
 }
