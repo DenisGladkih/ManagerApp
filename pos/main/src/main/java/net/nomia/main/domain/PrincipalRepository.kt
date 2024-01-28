@@ -6,8 +6,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -31,13 +29,6 @@ class PrincipalRepository @Inject constructor(
 
     private val principal = MutableStateFlow<Principal?>(null)
     val currentPrincipal = principal.asStateFlow()
-
-    private val authFlow = currentPrincipal
-        .flatMapLatest {
-            it?.auth ?: flowOf(null)
-        }
-        .distinctUntilChanged()
-
 
     init {
         settingsRepository.getAuthToken()
@@ -64,7 +55,10 @@ class PrincipalRepository @Inject constructor(
         }
     }
 
-    suspend fun getAuth(): Auth? = principal.value?.auth?.firstOrNull()
-
-    fun getAuthFlow(): Flow<Auth?> = authFlow
+    fun getAuthFlow(): Flow<Auth?> = currentPrincipal
+        .flatMapLatest { principal ->
+            principal
+                ?.auth
+                ?: flowOf(value = null)
+        }
 }
