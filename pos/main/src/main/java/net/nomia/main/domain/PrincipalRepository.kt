@@ -2,9 +2,14 @@ package net.nomia.main.domain
 
 import com.auth0.android.jwt.JWT
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
@@ -26,6 +31,13 @@ class PrincipalRepository @Inject constructor(
 
     private val principal = MutableStateFlow<Principal?>(null)
     val currentPrincipal = principal.asStateFlow()
+
+    private val authFlow = currentPrincipal
+        .flatMapLatest {
+            it?.auth ?: flowOf(null)
+        }
+        .distinctUntilChanged()
+
 
     init {
         settingsRepository.getAuthToken()
@@ -52,4 +64,7 @@ class PrincipalRepository @Inject constructor(
         }
     }
 
+    suspend fun getAuth(): Auth? = principal.value?.auth?.firstOrNull()
+
+    fun getAuthFlow(): Flow<Auth?> = authFlow
 }
