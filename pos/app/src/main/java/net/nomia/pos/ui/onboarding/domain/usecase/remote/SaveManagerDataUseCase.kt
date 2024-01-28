@@ -24,7 +24,7 @@ internal class SaveManagerDataUseCaseImpl @Inject constructor(
     private val authFlow = principalRepository.getAuthFlow()
         .stateIn(
             scope = CoroutineScope(Dispatchers.IO),
-            started = SharingStarted.WhileSubscribed(),
+            started = SharingStarted.Eagerly,
             initialValue = null,
         )
 
