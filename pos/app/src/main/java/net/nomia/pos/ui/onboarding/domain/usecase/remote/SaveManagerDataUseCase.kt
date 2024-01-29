@@ -4,15 +4,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import net.nomia.main.domain.PrincipalRepository
 import net.nomia.pos.ui.onboarding.data.repo.RemoteOnboardingRepository
+import net.nomia.pos.ui.onboarding.model.ManagerData
 import net.nomia.pos.ui.onboarding.model.Resource
 import javax.inject.Inject
 
 internal interface SaveManagerDataUseCase {
     operator fun invoke(
+        managerData: ManagerData,
     ): Flow<Resource<Nothing>>
 }
 
@@ -28,13 +29,11 @@ internal class SaveManagerDataUseCaseImpl @Inject constructor(
             initialValue = null,
         )
 
-    override fun invoke(): Flow<Resource<Nothing>> {
-        authFlow.value.let { auth ->
-            return if (auth == null) {
-                flowOf(Resource.Error())
-            } else {
-                remoteOnboardingRepository.saveManagerData(auth = auth)
-            }
-        }
-    }
+    override fun invoke(
+        managerData: ManagerData,
+    ): Flow<Resource<Nothing>> = remoteOnboardingRepository
+        .saveManagerData(
+            auth = authFlow.value,
+            managerData = managerData,
+        )
 }
