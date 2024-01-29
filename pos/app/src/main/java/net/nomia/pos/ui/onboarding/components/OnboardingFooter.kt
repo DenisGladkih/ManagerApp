@@ -24,9 +24,7 @@ import androidx.compose.ui.res.booleanResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import net.nomia.common.ui.composable.NomiaFilledButton
 import net.nomia.common.ui.composable.NomiaFooter
-import net.nomia.common.ui.composable.NomiaSpinner
 import net.nomia.common.ui.theme.spacers
 import net.nomia.pos.R
 import net.nomia.pos.ui.onboarding.composable.onboardingContentWidth
@@ -59,7 +57,9 @@ internal fun ColumnScope.OnboardingFooter(
                             containerColor = Color.Transparent,
                             contentColor = MaterialTheme.colorScheme.primary,
                         ),
-                        modifier = Modifier.width(width = 91.dp).weight(1f,false )
+                        modifier = Modifier
+                            .width(width = 91.dp)
+                            .weight(1f, false)
                     ) {
                         Text(
                             text = stringResource(id = R.string.back_action),
@@ -86,17 +86,12 @@ internal fun ColumnScope.OnboardingFooter(
                 }
             }
 
-            NomiaFilledButton(
-                enabled = continueButtonState != ContinueButtonState.DISABLED,
-                onClick = onContinueClick,
+            OnboardingContinueButton(
                 modifier = Modifier.weight(weight = 1f),
-            ) {
-                if (continueButtonState == ContinueButtonState.PROGRESS) {
-                    NomiaSpinner()
-                } else {
-                    Text(text = stringResource(id = R.string.continue_action))
-                }
-            }
+                continueButtonState = continueButtonState,
+                onClick = onContinueClick,
+            )
         }
     }
 }
+
