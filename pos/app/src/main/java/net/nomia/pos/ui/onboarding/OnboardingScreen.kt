@@ -20,6 +20,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,6 +28,7 @@ import androidx.compose.ui.res.booleanResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.launch
 import net.nomia.common.ui.composable.NomiaScrollableScaffold
 import net.nomia.common.ui.theme.appResources
 import net.nomia.common.ui.theme.spacers
@@ -55,6 +57,8 @@ internal fun OnboardingScreen(
 
     val defaultErrorMessage = stringResource(id = R.string.something_went_wrong)
 
+    val scope = rememberCoroutineScope()
+
     val state by viewModel.collectAsState(
         launchActions = listOf(
             OnboardingMviAction.FetchManagerData,
@@ -62,7 +66,12 @@ internal fun OnboardingScreen(
     ) { event ->
         if (event is OnboardingMviEvent.OnShowError) {
             val message = event.error
-            snackbarHostState.showSnackbar(message = message ?: defaultErrorMessage)
+
+            scope.launch {
+                snackbarHostState.showSnackbar(
+                    message = message ?: defaultErrorMessage
+                )
+            }
         }
     }
 
