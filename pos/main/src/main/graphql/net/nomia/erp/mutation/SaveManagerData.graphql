@@ -1,0 +1,8 @@
+mutation SaveManagerData($input:StoreCreateInput!) {
+    createStoreV2(
+        storeCreateInput:$input
+    ) {
+        errorMessage
+        result
+    }
+}
