@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
 import net.nomia.auth.domain.LogoutUseCase
 import net.nomia.mvi.MviActor
+import net.nomia.pos.ui.onboarding.domain.toManagerData
 import net.nomia.pos.ui.onboarding.domain.usecase.local.GetManagerDataUseCase
 import net.nomia.pos.ui.onboarding.domain.usecase.local.SaveFifthStepValueUseCase
 import net.nomia.pos.ui.onboarding.domain.usecase.local.SaveFirstStepValueUseCase
@@ -109,25 +109,27 @@ internal class OnboardingMviActor(
                 )
             )
 
-            OnboardingStep.FIFTH -> saveManagerDataUseCase().mapLatest { result ->
-                when (result) {
-                    is Resource.Loading ->
-                        OnboardingMviEffect.SetContinueButtonState(ContinueButtonState.PROGRESS)
+            OnboardingStep.FIFTH ->
+                saveManagerDataUseCase(managerData = previousState.toManagerData())
+                    .map { resource ->
+                        when (resource) {
+                            is Resource.Loading ->
+                                OnboardingMviEffect.SetContinueButtonState(ContinueButtonState.PROGRESS)
 
-                    is Resource.Success ->
-                        OnboardingMviEffect.MoveFroward(
-                            onboardingStep = previousState.onboardingStep.getNext(),
-                            skipButtonVisible = false,
-                            backButtonVisible = false,
-                            footerVisible = false,
-                            coloredSegmentsCount = previousState.coloredSegments.inc()
-                        )
+                            is Resource.Success ->
+                                OnboardingMviEffect.MoveFroward(
+                                    onboardingStep = previousState.onboardingStep.getNext(),
+                                    skipButtonVisible = false,
+                                    backButtonVisible = false,
+                                    footerVisible = false,
+                                    coloredSegmentsCount = previousState.coloredSegments.inc()
+                                )
 
-                    is Resource.Error ->
-                        OnboardingMviEffect.ShowError(message = result.message)
+                            is Resource.Error ->
+                                OnboardingMviEffect.ShowError(message = resource.message)
 
-                }
-            }
+                        }
+                    }
 
             OnboardingStep.SIXTH -> emptyFlow()
         }
@@ -187,23 +189,25 @@ internal class OnboardingMviActor(
     private infix fun OnboardingMviAction.skipStep(
         previousState: OnboardingMviState,
     ): Flow<OnboardingMviEffect> = if (previousState.onboardingStep == OnboardingStep.FIFTH) {
-        saveManagerDataUseCase().map { resource ->
-            when (resource) {
-                is Resource.Loading ->
-                    OnboardingMviEffect.SetContinueButtonState(ContinueButtonState.PROGRESS)
 
-                is Resource.Success ->
-                    OnboardingMviEffect.MoveFroward(
-                        onboardingStep = previousState.onboardingStep.getNext(),
-                        skipButtonVisible = false,
-                        backButtonVisible = false,
-                        footerVisible = false,
-                        coloredSegmentsCount = previousState.coloredSegments.inc()
-                    )
+        saveManagerDataUseCase(managerData = previousState.toManagerData())
+            .map { resource ->
+                when (resource) {
+                    is Resource.Loading ->
+                        OnboardingMviEffect.SetContinueButtonState(ContinueButtonState.PROGRESS)
 
-                is Resource.Error -> OnboardingMviEffect.ShowError(message = resource.message)
+                    is Resource.Success ->
+                        OnboardingMviEffect.MoveFroward(
+                            onboardingStep = previousState.onboardingStep.getNext(),
+                            skipButtonVisible = false,
+                            backButtonVisible = false,
+                            footerVisible = false,
+                            coloredSegmentsCount = previousState.coloredSegments.inc()
+                        )
+
+                    is Resource.Error -> OnboardingMviEffect.ShowError(message = resource.message)
+                }
             }
-        }
     } else {
         flowOf(
             OnboardingMviEffect.MoveFroward(
