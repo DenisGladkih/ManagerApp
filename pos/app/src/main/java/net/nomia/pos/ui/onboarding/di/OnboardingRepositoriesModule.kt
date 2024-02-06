@@ -4,10 +4,10 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import net.nomia.pos.ui.onboarding.data.repo.LocalOnboardingRepository
-import net.nomia.pos.ui.onboarding.data.repo.RemoteOnboardingRepository
-import net.nomia.pos.ui.onboarding.domain.repo.LocalOnboardingRepositoryImpl
-import net.nomia.pos.ui.onboarding.domain.repo.RemoteOnboardingRepositoryImpl
+import net.nomia.pos.ui.onboarding.domain.repo.LocalOnboardingRepository
+import net.nomia.pos.ui.onboarding.domain.repo.RemoteOnboardingRepository
+import net.nomia.pos.ui.onboarding.data.repo.LocalOnboardingRepositoryImpl
+import net.nomia.pos.ui.onboarding.data.repo.RemoteOnboardingRepositoryImpl
 
 @Module
 @InstallIn(SingletonComponent::class)

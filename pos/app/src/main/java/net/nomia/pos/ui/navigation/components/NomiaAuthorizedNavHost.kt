@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import net.nomia.pos.ui.OnboardingDestination
 import net.nomia.pos.ui.argumentList
-import net.nomia.pos.ui.onboarding.OnboardingScreen
+import net.nomia.pos.ui.onboarding.presentation.OnboardingScreen
 import net.nomia.pos.ui.route
 
 @Composable

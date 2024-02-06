@@ -12,8 +12,8 @@ import net.nomia.pos.ui.onboarding.domain.usecase.local.SaveFourthStepValueUseCa
 import net.nomia.pos.ui.onboarding.domain.usecase.local.SaveSecondStepValueUseCase
 import net.nomia.pos.ui.onboarding.domain.usecase.local.SaveThirdStepValueUseCase
 import net.nomia.pos.ui.onboarding.domain.usecase.remote.SaveManagerDataUseCase
-import net.nomia.pos.ui.onboarding.mvi.OnboardingMviActor
-import net.nomia.pos.ui.onboarding.mvi.OnboardingMviFeatureFactory
+import net.nomia.pos.ui.onboarding.presentation.mvi.OnboardingMviActor
+import net.nomia.pos.ui.onboarding.presentation.mvi.OnboardingMviFeatureFactory
 
 @Module
 @InstallIn(ViewModelComponent::class)

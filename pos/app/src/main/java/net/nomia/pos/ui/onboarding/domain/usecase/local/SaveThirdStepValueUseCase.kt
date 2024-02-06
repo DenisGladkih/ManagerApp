@@ -1,7 +1,7 @@
 package net.nomia.pos.ui.onboarding.domain.usecase.local
 
-import net.nomia.pos.ui.onboarding.data.repo.LocalOnboardingRepository
-import net.nomia.pos.ui.onboarding.model.ThirdStepValue
+import net.nomia.pos.ui.onboarding.domain.repo.LocalOnboardingRepository
+import net.nomia.pos.ui.onboarding.domain.model.ThirdStepValue
 import javax.inject.Inject
 
 internal interface SaveThirdStepValueUseCase {

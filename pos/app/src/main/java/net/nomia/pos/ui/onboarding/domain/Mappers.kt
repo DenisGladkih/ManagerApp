@@ -8,11 +8,11 @@ import net.nomia.erp.schema.type.StoreSurveyInput
 import net.nomia.erp.schema.type.StoreSurveyStoreService
 import net.nomia.erp.schema.type.StoreSurveyStoreType
 import net.nomia.erp.schema.type.StoreType
-import net.nomia.pos.ui.onboarding.model.FifthStepValue
-import net.nomia.pos.ui.onboarding.model.FourthStepValue
-import net.nomia.pos.ui.onboarding.model.ManagerData
-import net.nomia.pos.ui.onboarding.model.ThirdStepValue
-import net.nomia.pos.ui.onboarding.mvi.OnboardingMviState
+import net.nomia.pos.ui.onboarding.domain.model.FifthStepValue
+import net.nomia.pos.ui.onboarding.domain.model.FourthStepValue
+import net.nomia.pos.ui.onboarding.domain.model.ManagerData
+import net.nomia.pos.ui.onboarding.domain.model.ThirdStepValue
+import net.nomia.pos.ui.onboarding.presentation.mvi.OnboardingMviState
 import java.util.UUID
 
 internal fun ManagerData.toCreateStoreInput(

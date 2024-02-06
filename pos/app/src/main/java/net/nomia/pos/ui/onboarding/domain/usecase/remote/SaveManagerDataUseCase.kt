@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import net.nomia.main.domain.PrincipalRepository
-import net.nomia.pos.ui.onboarding.data.repo.RemoteOnboardingRepository
-import net.nomia.pos.ui.onboarding.model.ManagerData
-import net.nomia.pos.ui.onboarding.model.Resource
+import net.nomia.pos.ui.onboarding.domain.repo.RemoteOnboardingRepository
+import net.nomia.pos.ui.onboarding.domain.model.ManagerData
+import net.nomia.pos.ui.onboarding.domain.model.Resource
 import javax.inject.Inject
 
 internal interface SaveManagerDataUseCase {
